@@ -234,12 +234,13 @@ public class APIClient {
      * @throws IOException if HTTP client is given bad values
      * @see APIException
      * */
-    public final boolean deleteAccount() throws IOException {
+    public final boolean deleteAccount(String id) throws IOException {
         CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
         boolean result;
         try {
             HttpDelete httpdelete = new HttpDelete(apiUrl + "/account/");
             httpdelete.addHeader(childHeaders[0], childHeaders[1]);
+            httpdelete.addHeader("X-Child-Account-By-Id",id);
             CloseableHttpResponse response = client.execute(httpdelete);
             try {
                 JsonPrimitive responseParse = responseToJsonElement(response).getAsJsonPrimitive();

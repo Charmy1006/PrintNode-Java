@@ -111,4 +111,8 @@ public class CreateAccountObject {
         return apiKeys;
     }
 
+	public int getId() {
+		return 0;
+	}
+
 }
