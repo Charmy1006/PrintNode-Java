@@ -898,7 +898,7 @@ public class APIClient {
 	 *             if HTTP client is given bad values
 	 * @see Printer
 	 */
-	public final JsonArray getPrinterforChildAccount() throws IOException {
+	public final Printer[] getPrinterforChildAccount() throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		Printer[] printers;
 		try {
@@ -911,7 +911,7 @@ public class APIClient {
 				for (int i = 0; i < responseParse.size(); i++) {
 					printers[i] = new Printer(responseParse.get(i).getAsJsonObject());
 				}
-				return responseParse;
+				return printers;
 			} finally {
 				response.close();
 			}
