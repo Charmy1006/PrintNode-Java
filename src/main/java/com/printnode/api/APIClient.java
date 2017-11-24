@@ -933,7 +933,7 @@ public class APIClient {
 	 *             if HTTP client is given bad values
 	 * @see Printer
 	 */
-	public final JsonArray getPrinterCapabilities(int id) throws IOException {
+	public final Printer[] getPrinterCapabilities(int id) throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		Printer[] printers;
 		try {
@@ -942,7 +942,11 @@ public class APIClient {
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
 				JsonArray printerCapability = responseToJsonElement(response).getAsJsonArray();
-				return printerCapability;
+				printers = new Printer[printerCapability.size()];
+				for (int i = 0; i < printerCapability.size(); i++) {
+					printers[i] = new Printer(printerCapability.get(i).getAsJsonObject());
+				}
+				return printers;
 			} finally {
 				response.close();
 			}
