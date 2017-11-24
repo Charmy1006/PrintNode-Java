@@ -56,7 +56,13 @@ public class Options {
     public Options() {
     }
 
-    /**
+    public Options(String paper, String dpi, int copies) {
+		setPaper(paper);
+		setDpi(dpi);
+		setCopies(copies);
+	}
+
+	/**
      * @param newBin set the bin we want to use.
      * */
     public final void setBin(final String newBin) {

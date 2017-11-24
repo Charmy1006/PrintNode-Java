@@ -2,6 +2,8 @@ package com.printnode.api;
 
 import java.io.IOException;
 import org.apache.commons.codec.binary.Base64;
+
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,6 +58,7 @@ public class PrintJobJson {
      * @param newContentType Type of content. base64, uri, etc.
      * @param newContent either a file, or a URL to a file. Depends on contentType.
      * @param newSource Would be from the PrintNode-Java client.
+     * @param options2 
      * @throws IOException if "xxx_base64" is selected as content-type
      * and the file specified in content does not exist.
      * */
@@ -63,7 +66,10 @@ public class PrintJobJson {
             final String newTitle,
             final String newContentType,
             final String newContent,
-            final String newSource) throws IOException {
+            final String newSource,
+            final String paper,
+            final String dpi,
+            final int copies) throws IOException {
         printerId = newPrinterId;
         title = newTitle;
         contentType = newContentType;
@@ -75,7 +81,7 @@ public class PrintJobJson {
             content = newContent;
         }
         source = newSource;
-        options = new Options();
+        options = new Options(paper,dpi,copies);
     }
 
     /**
