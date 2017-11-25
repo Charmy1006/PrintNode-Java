@@ -19,7 +19,7 @@ public class UpdateAccount {
 		Random rad = new Random();
 
 		UUID id = UUID.randomUUID();
-		String randomEmail = "testuser" + id + "@gmail.com";
+		String randomEmail = id + "@gmail.com";
 		CreateAccountJson accountInfo = new CreateAccountJson(null, null, randomEmail, "pwd@orderhive");
 
 		Boolean isUpdate = aClient.updateAccount("54510", accountInfo);

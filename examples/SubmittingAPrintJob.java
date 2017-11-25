@@ -17,10 +17,11 @@ public class SubmittingAPrintJob{
 		Printer[] myPrinters = aClient.getPrinters("");
 		Printer myPrinterForPrintJob = myPrinters[0];
 
+		PrintjobOptions options = new PrintjobOptions("Letter Small", "600x600", "1");
 		//We now need to create a PrintJobJson object so we can put use it in a request.
 		//This takes 5 arguments:
 		//printerId,title,contentType,content and source.
-		PrintJobJson myPrintJobCreation = new PrintJobJson(myPrinterForPrintJob.getId(),"PrintNode-Java","pdf_uri","http://a.test.pdf","From PrintNode-Java");
+		PrintJobJson myPrintJobCreation = new PrintJobJson(myPrinterForPrintJob.getId(),"PrintNode-Java","pdf_uri","http://a.test.pdf","From PrintNode-Java","Small Letter", "600x600",1);
 
 		//We'll then make the request by using APIClient.createPrintJob
 		int myPrintJobId = aClient.createPrintJob(myPrintJobCreation);

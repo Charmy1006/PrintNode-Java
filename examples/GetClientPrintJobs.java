@@ -3,6 +3,7 @@ import java.io.IOException;
 import com.google.gson.JsonArray;
 import com.printnode.api.APIClient;
 import com.printnode.api.Auth;
+import com.printnode.api.PrintJob;
 
 public class GetClientPrintJobs {
 
@@ -17,7 +18,9 @@ public class GetClientPrintJobs {
 		
 		aClient.setChildAccountById(51375);
 		
-		JsonArray printjobs = aClient.getPrintJobsOfClientAccount();
+		 PrintJob[] printjobs = aClient.getPrintJobsOfClientAccount();
+		
+		System.out.println("Print Jobs: "+printjobs);
 	}
 	
 

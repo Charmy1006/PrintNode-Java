@@ -769,21 +769,26 @@ public class APIClient {
 	 *             if HTTP client is given bad values
 	 * @see PrintJob
 	 */
-	public final JsonArray getPrintJobsOfClientAccount() throws IOException {
+	public final PrintJob[] getPrintJobsOfClientAccount() throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
+		PrintJob[] printjobs;
 		try {
 			HttpGet httpget = new HttpGet(apiUrl + "/printjobs/" );
 			httpget.addHeader(childHeaders[0], childHeaders[1]);
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
 				JsonArray responseParse = responseToJsonElement(response).getAsJsonArray();
-				return responseParse;
+				printjobs = new PrintJob[responseParse.size()];
+				for (int i = 0; i < responseParse.size(); i++) {
+					printjobs[i] = new PrintJob(responseParse.get(i).getAsJsonObject());
+				}
 			} finally {
 				response.close();
 			}
 		} finally {
 			client.close();
 		}
+		return printjobs;
 
 	}
 
