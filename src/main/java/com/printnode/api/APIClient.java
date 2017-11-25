@@ -453,12 +453,11 @@ public class APIClient {
 		return account;
 	}
 
-	public final Boolean updateAccount(String id, CreateAccountJson accountInfo) throws IOException {
+	public final Boolean updateAccount(CreateAccountJson accountInfo) throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		try {
 			HttpPatch httpPatch = new HttpPatch(apiUrl + "/account/");
 			httpPatch.addHeader(childHeaders[0], childHeaders[1]);
-			httpPatch.addHeader("X-Child-Account-By-Id", id);
 			Gson gson = gsonWithAdapters();
 			String json = gson.toJson(accountInfo.getAccount());
 			StringEntity jsonEntity = new StringEntity(json);

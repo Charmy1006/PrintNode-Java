@@ -21,8 +21,10 @@ public class UpdateAccount {
 		UUID id = UUID.randomUUID();
 		String randomEmail = id + "@gmail.com";
 		CreateAccountJson accountInfo = new CreateAccountJson(null, null, randomEmail, "pwd@orderhive");
+		
+		aClient.setChildAccountById(232312);
 
-		Boolean isUpdate = aClient.updateAccount("54510", accountInfo);
+		Boolean isUpdate = aClient.updateAccount(accountInfo);
 
 		System.out.println("Account Obj Updates: " + isUpdate);
 
