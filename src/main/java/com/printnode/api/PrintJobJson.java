@@ -83,6 +83,39 @@ public class PrintJobJson {
         source = newSource;
         options = new Options(paper,dpi,copies);
     }
+    
+    /**
+     * Creates an object to be serialized into JSON.
+     * Requires a contentType - if contentType is base_64, it is encoded into base64.
+     *
+     * @param newPrinterId id of the printer which wil run the PrintJob.
+     * @param newTitle title of the PrintJob.
+     * @param newContentType Type of content. base64, uri, etc.
+     * @param newContent either a file, or a URL to a file. Depends on contentType.
+     * @param newSource Would be from the PrintNode-Java client.
+     * @param options2 
+     * @throws IOException if "xxx_base64" is selected as content-type
+     * and the file specified in content does not exist.
+     * */
+    public PrintJobJson(final int newPrinterId,
+            final String newTitle,
+            final String newContentType,
+            final String newContent,
+            final String newSource
+           ) throws IOException {
+        printerId = newPrinterId;
+        title = newTitle;
+        contentType = newContentType;
+        if (contentType == "pdf_base64" || contentType == "raw_base64") {
+            Path filePath = Paths.get(newContent);
+            byte[] fileContent = Files.readAllBytes(filePath);
+            content = new String(Base64.encodeBase64(fileContent));
+        } else {
+            content = newContent;
+        }
+        source = newSource;
+        options = new Options();
+    }
 
     /**
      * @return Options object of this PrintJob.
