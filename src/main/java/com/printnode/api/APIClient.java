@@ -12,6 +12,8 @@ import com.google.gson.stream.JsonWriter;
 import com.sun.javafx.collections.MappingChange.Map;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
+import java.util.Objects;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.auth.AuthScope;
@@ -41,74 +43,74 @@ public class APIClient {
 	 *
 	 * @return a type adapter for GSON.
 	 */
-	private static final TypeAdapter<Integer> INT_ADAPTER  = new TypeAdapter<Integer>() {
+	private static final TypeAdapter<Integer> INT_ADAPTER = new TypeAdapter<Integer>() {
 
-															   @Override
-															   public void write(final JsonWriter out, final Integer value) throws IOException {
-																   if (value == -1) {
-																	   out.nullValue();
-																   } else {
-																	   out.value(value);
-																   }
-															   }
+		@Override
+		public void write(final JsonWriter out, final Integer value) throws IOException {
+			if (value == -1) {
+				out.nullValue();
+			} else {
+				out.value(value);
+			}
+		}
 
-															   @Override
-															   public Integer read(final JsonReader in) throws IOException {
-																   return in.nextInt();
-															   }
+		@Override
+		public Integer read(final JsonReader in) throws IOException {
+			return in.nextInt();
+		}
 
-														   };
+	};
 
 	/**
 	 * TypeAdapter for GSON. Converts null Bools to non-serialized values.
 	 *
 	 * @return a type adapter for GSON.
 	 */
-	static final TypeAdapter<Boolean>		  BOOL_ADAPTER = new TypeAdapter<Boolean>() {
+	static final TypeAdapter<Boolean> BOOL_ADAPTER = new TypeAdapter<Boolean>() {
 
-															   @Override
-															   public void write(final JsonWriter out, final Boolean value) throws IOException {
-																   if (value == null) {
-																	   out.nullValue();
-																   } else {
-																	   out.value(value);
-																   }
-															   }
+		@Override
+		public void write(final JsonWriter out, final Boolean value) throws IOException {
+			if (value == null) {
+				out.nullValue();
+			} else {
+				out.value(value);
+			}
+		}
 
-															   @Override
-															   public Boolean read(final JsonReader in) throws IOException {
-																   return in.nextBoolean();
-															   }
-														   };
+		@Override
+		public Boolean read(final JsonReader in) throws IOException {
+			return in.nextBoolean();
+		}
+	};
 
 	/**
 	 * The API-Url to be used with the Library.
 	 */
-	private static String					  apiUrl	   = "https://api.printnode.com";
+	private static String apiUrl = "https://api.printnode.com";
 
 	/**
 	 * The child headers we are authenticating with.
 	 */
-	private String[]						  childHeaders = new String[2];
+	private String[] childHeaders = new String[2];
 
 	/**
 	 * The credentials we are authenticating with.
 	 */
-	private CredentialsProvider				  credentials;
+	private CredentialsProvider credentials;
 
 	/**
 	 * default constructor for the APIClient.
 	 *
 	 * @param auth
-	 *            an Auth object which the APIClient will then save into a CredentialsProvider object.
+	 *            an Auth object which the APIClient will then save into a
+	 *            CredentialsProvider object.
 	 * @see Auth
 	 */
 	public APIClient(final Auth auth) {
 		String[] credentialsArray = auth.getCredentials();
 		credentials = new BasicCredentialsProvider();
-		credentials.setCredentials(
-			new AuthScope(null, -1),
-			new UsernamePasswordCredentials(credentialsArray[0], credentialsArray[1]));
+		credentials.setCredentials(new AuthScope(null, -1),
+				new UsernamePasswordCredentials(credentialsArray[0], credentialsArray[1]));
 		childHeaders[0] = "";
 		childHeaders[1] = "";
 
@@ -174,17 +176,14 @@ public class APIClient {
 	}
 
 	/**
-	 * Creates a non-default Gson object.
-	 *s
+	 * Creates a non-default Gson object. s
+	 * 
 	 * @return Gson object with type-adapters required for our objects.
 	 */
 	public final Gson gsonWithAdapters() {
-		Gson gson = new GsonBuilder()
-			.registerTypeAdapter(Integer.class, INT_ADAPTER)
-			.registerTypeAdapter(int.class, INT_ADAPTER)
-			.registerTypeAdapter(Boolean.class, BOOL_ADAPTER)
-			.registerTypeAdapter(boolean.class, BOOL_ADAPTER)
-			.create();
+		Gson gson = new GsonBuilder().registerTypeAdapter(Integer.class, INT_ADAPTER)
+				.registerTypeAdapter(int.class, INT_ADAPTER).registerTypeAdapter(Boolean.class, BOOL_ADAPTER)
+				.registerTypeAdapter(boolean.class, BOOL_ADAPTER).create();
 		return gson;
 	}
 
@@ -245,9 +244,9 @@ public class APIClient {
 	}
 
 	/**
-	 * Deletes account.
-	 * This can only be used when specified a child account is specified by email, id or creatorRef.
-	 * Otherwise, will throw an APIException as the response will throw a non 2xx status code.
+	 * Deletes account. This can only be used when specified a child account is
+	 * specified by email, id or creatorRef. Otherwise, will throw an
+	 * APIException as the response will throw a non 2xx status code.
 	 *
 	 * @return Boolean whether account was deleted or not.
 	 * @throws IOException
@@ -275,9 +274,9 @@ public class APIClient {
 	}
 
 	/**
-	 * Given a set of clients, such as "10-15" or "10,11,13" or just "10",
-	 * will set whether clients in the set are enabled.
-	 * If you are unsure what is possible for clientSet, check the PrintNode API docs on printnode.com.
+	 * Given a set of clients, such as "10-15" or "10,11,13" or just "10", will
+	 * set whether clients in the set are enabled. If you are unsure what is
+	 * possible for clientSet, check the PrintNode API docs on printnode.com.
 	 *
 	 * @param clientSet
 	 *            set of clients as a string.
@@ -317,12 +316,12 @@ public class APIClient {
 	}
 
 	/**
-	 * Given an Account object, modifies an account.
-	 * This can only be used when a child account is specified by email, id or creatorRef.
+	 * Given an Account object, modifies an account. This can only be used when
+	 * a child account is specified by email, id or creatorRef.
 	 *
 	 * @param accountInfo
-	 *            account object. Requires atleast one value set.
-	 *            Having id set will throw an exception, unless set to -1.
+	 *            account object. Requires atleast one value set. Having id set
+	 *            will throw an exception, unless set to -1.
 	 * @return Whoami object of the modified account.
 	 * @throws IOException
 	 *             if HTTP client is given bad values
@@ -421,8 +420,8 @@ public class APIClient {
 	 *
 	 * @param accountInfo
 	 *            CreateAccountJson object with values set.
-	 * @return CreateAccountObject.
-	 *         This is practically the same as the CreateAccountJson object with some other additions.
+	 * @return CreateAccountObject. This is practically the same as the
+	 *         CreateAccountJson object with some other additions.
 	 * @throws IOException
 	 *             if HTTP client is given bad values
 	 * @see CreateAccountJson
@@ -462,7 +461,7 @@ public class APIClient {
 			String json = gson.toJson(accountInfo.getAccount());
 			StringEntity jsonEntity = new StringEntity(json);
 			httpPatch.setEntity(jsonEntity);
-			//  httpPatch.addHeader("email",accountInfo);
+			// httpPatch.addHeader("email",accountInfo);
 
 			httpPatch.addHeader("Content-Type", "application/json");
 
@@ -545,8 +544,9 @@ public class APIClient {
 	}
 
 	/**
-	 * Given the OS of the client as a string, returns the latest available client.
-	 * The parameter can ONLY be "osx" or "windows". either can have any case, so "OSX" or "Windows" also works.
+	 * Given the OS of the client as a string, returns the latest available
+	 * client. The parameter can ONLY be "osx" or "windows". either can have any
+	 * case, so "OSX" or "Windows" also works.
 	 *
 	 * @param os
 	 *            os of client requested as a string.
@@ -648,7 +648,8 @@ public class APIClient {
 	}
 
 	/**
-	 * Given a set of states, return an array of states for each printjob in the set.
+	 * Given a set of states, return an array of states for each printjob in the
+	 * set.
 	 *
 	 * @param printJobSet
 	 *            set of printjobs to find the states for.
@@ -692,7 +693,8 @@ public class APIClient {
 	}
 
 	/**
-	 * Given a set of printers, and a set of printjobs, return an array of printjobs relative to the set of printers.
+	 * Given a set of printers, and a set of printjobs, return an array of
+	 * printjobs relative to the set of printers.
 	 *
 	 * @param printerSet
 	 *            set of printers.
@@ -703,7 +705,8 @@ public class APIClient {
 	 *             if HTTP client is given bad values
 	 * @see PrintJob
 	 */
-	public final PrintJob[] getPrintJobsByPrinter(final String printerSet, final String printJobSet) throws IOException {
+	public final PrintJob[] getPrintJobsByPrinter(final String printerSet, final String printJobSet)
+			throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		PrintJob[] printjobs;
 		try {
@@ -758,10 +761,10 @@ public class APIClient {
 		return printjobs;
 
 	}
-	
+
 	/**
-	 * @author Rucha
-	 * For a specified X-Child-Account-By-Id returns the set of print jobs
+	 * @author Rucha For a specified X-Child-Account-By-Id returns the set of
+	 *         print jobs
 	 *
 	 * @return Array of printjobs.
 	 * @throws IOException
@@ -772,7 +775,7 @@ public class APIClient {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		PrintJob[] printjobs;
 		try {
-			HttpGet httpget = new HttpGet(apiUrl + "/printjobs/" );
+			HttpGet httpget = new HttpGet(apiUrl + "/printjobs/");
 			httpget.addHeader(childHeaders[0], childHeaders[1]);
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
@@ -792,8 +795,9 @@ public class APIClient {
 	}
 
 	/**
-	 * Given a set of computers, and a set of printers, return an array of printers relative to the set of computers.
-	 * If computerSet is a blank string, this will throw an APIException.
+	 * Given a set of computers, and a set of printers, return an array of
+	 * printers relative to the set of computers. If computerSet is a blank
+	 * string, this will throw an APIException.
 	 *
 	 * @param computerSet
 	 *            set of computers.
@@ -804,7 +808,8 @@ public class APIClient {
 	 *             if HTTP client is given bad values
 	 * @see Printer
 	 */
-	public final Printer[] getPrintersByComputers(final String computerSet, final String printerSet) throws IOException {
+	public final Printer[] getPrintersByComputers(final String computerSet, final String printerSet)
+			throws IOException {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		Printer[] printers;
 		try {
@@ -841,7 +846,12 @@ public class APIClient {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		Scale[] scales;
 		try {
-			HttpGet httpget = new HttpGet(apiUrl + "/computer/" + computerId + "/scales/");
+			HttpGet httpget;
+			if (Objects.nonNull(computerId)) {
+				httpget = new HttpGet(apiUrl + "/computer/" + computerId + "/scales/");
+			} else {
+				httpget = new HttpGet(apiUrl + "/scales/");
+			}
 			httpget.addHeader(childHeaders[0], childHeaders[1]);
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
@@ -894,8 +904,8 @@ public class APIClient {
 	}
 
 	/**
-	 * @author Rucha
-	 * Given a specified X-Child-Account-By-Id returns an array of printers for speicified clientId.
+	 * @author Rucha Given a specified X-Child-Account-By-Id returns an array of
+	 *         printers for speicified clientId.
 	 *
 	 * @return Array of Printers.
 	 * @throws IOException
@@ -924,14 +934,14 @@ public class APIClient {
 		}
 
 	}
-	
-	
+
 	/**
 	 * @author Rucha
 	 * 
-	 * Returns details of specified printer id in Params
+	 *         Returns details of specified printer id in Params
 	 *
-	 * @param int id(printer id)
+	 * @param int
+	 *            id(printer id)
 	 * @return Array of Printers.
 	 * @throws IOException
 	 *             if HTTP client is given bad values
@@ -960,9 +970,9 @@ public class APIClient {
 
 	}
 
-
 	/**
-	 * Given a UUID, a client edition, and a client version, returns a client-key.
+	 * Given a UUID, a client edition, and a client version, returns a
+	 * client-key.
 	 *
 	 * @param uuid
 	 *            the UUID.
@@ -979,13 +989,7 @@ public class APIClient {
 		String clientKeyValue;
 		try {
 			HttpGet httpget = new HttpGet(
-				apiUrl
-					+ "/client/apikey/"
-					+ uuid
-					+ "?edition="
-					+ edition
-					+ "&version="
-					+ version);
+					apiUrl + "/client/apikey/" + uuid + "?edition=" + edition + "&version=" + version);
 			httpget.addHeader(childHeaders[0], childHeaders[1]);
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
@@ -1004,7 +1008,8 @@ public class APIClient {
 	 * Given a reference to an apikey, return that apikey.
 	 *
 	 * @param apikey
-	 *            reference to the apikey, which can be found in a whoami request.
+	 *            reference to the apikey, which can be found in a whoami
+	 *            request.
 	 * @return value of the apikey.
 	 * @throws IOException
 	 *             if HTTP client is given bad values
@@ -1057,7 +1062,8 @@ public class APIClient {
 	}
 
 	/**
-	 * Given a status code and a response, if we have an error, it will throw an APIException.
+	 * Given a status code and a response, if we have an error, it will throw an
+	 * APIException.
 	 *
 	 * @param statuscode
 	 *            Statuscode of the response.
@@ -1066,11 +1072,8 @@ public class APIClient {
 	 */
 	private void checkResponseForExceptions(final int statuscode, final String response) {
 		if (!(Integer.toString(statuscode).startsWith("2"))) {
-			throw new APIException(
-				"\nAPI response error found with status code:"
-					+ statuscode
-					+ "\nThe response content was this:"
-					+ response);
+			throw new APIException("\nAPI response error found with status code:" + statuscode
+					+ "\nThe response content was this:" + response);
 		}
 	}
 
