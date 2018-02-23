@@ -846,12 +846,35 @@ public class APIClient {
 		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
 		Scale[] scales;
 		try {
-			HttpGet httpget;
-			if (Objects.nonNull(computerId)) {
-				httpget = new HttpGet(apiUrl + "/computer/" + computerId + "/scales/");
-			} else {
-				httpget = new HttpGet(apiUrl + "/scales/");
+			HttpGet httpget = new HttpGet(apiUrl + "/computer/" + computerId + "/scales/");
+			httpget.addHeader(childHeaders[0], childHeaders[1]);
+			CloseableHttpResponse response = client.execute(httpget);
+			try {
+				JsonArray responseParse = responseToJsonElement(response).getAsJsonArray();
+				scales = new Scale[responseParse.size()];
+				for (int i = 0; i < responseParse.size(); i++) {
+					scales[i] = new Scale(responseParse.get(i).getAsJsonObject());
+				}
+			} finally {
+				response.close();
 			}
+		} finally {
+			client.close();
+		}
+		return scales;
+
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public final Scale[] getScales() throws IOException {
+		CloseableHttpClient client = HttpClients.custom().setDefaultCredentialsProvider(credentials).build();
+		Scale[] scales;
+		try {
+			HttpGet httpget = new HttpGet(apiUrl + "/scales/");
 			httpget.addHeader(childHeaders[0], childHeaders[1]);
 			CloseableHttpResponse response = client.execute(httpget);
 			try {
